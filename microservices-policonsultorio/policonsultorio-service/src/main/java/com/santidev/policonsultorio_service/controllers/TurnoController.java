@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/turno")
+@RequestMapping("/api/policonsultorio/turno")
 @RequiredArgsConstructor
 public class TurnoController {
 

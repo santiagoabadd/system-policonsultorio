@@ -1,0 +1,30 @@
+services:
+
+  ### Postgree database for Users
+  db-users:
+    container_name: db-users
+    image: postgres:16.3
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: users_db
+      POSTGRES_PASSWORD: root
+    ports:
+      - 5434:5434
+    expose:
+      - 5434
+    command: -p 5434
+
+  ### MySQL database for policonsultorio-service
+  db-clinica:
+    container_name: db-clinica
+    image: mysql:8.0.33
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: clinica_db
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3309:3306
+    expose:
+      - 3306
+
