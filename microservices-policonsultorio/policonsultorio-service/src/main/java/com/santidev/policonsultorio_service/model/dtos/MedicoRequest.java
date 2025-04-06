@@ -11,6 +11,6 @@ public class MedicoRequest {
 
     private String nombre;
     private String especialidad;
-    private Clinica clinica;
+    private long clinicaId;
 
 }

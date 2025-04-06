@@ -12,6 +12,7 @@ public class TurnoRequest {
 
     private String estado;
     private LocalDateTime fecha;
-    private MedicoResponse medico;
-    private ClinicaResponse clinica;
+    private long medicoId;
+    private long pacienteId;
+    private long clinicaId;
 }

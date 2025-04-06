@@ -38,8 +38,8 @@ public class MedicoService {
         var medico = Medico.builder()
                 .nombre(medicoRequest.getNombre())
                 .especialidad(medicoRequest.getEspecialidad())
-                .clinica(clinicaRepository.findById(medicoRequest.getClinica().getId())
-                        .orElseThrow(()-> new RuntimeException("Clinica no encontrada con la id "+medicoRequest.getClinica().getId())))
+                .clinica(clinicaRepository.findById(medicoRequest.getClinicaId())
+                        .orElseThrow(()-> new RuntimeException("Clinica no encontrada con la id "+medicoRequest.getClinicaId())))
                 .build();
 
         medicoRepository.save(medico);

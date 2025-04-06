@@ -1,0 +1,100 @@
+@import url(https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Acme|Alegreya|Alegreya+Sans|Anton|Archivo|Archivo+Black|Archivo+Narrow|Arimo|Arvo|Asap|Asap+Condensed|Bitter|Bowlby+One+SC|Bree+Serif|Cabin|Cairo|Catamaran|Crete+Round|Crimson+Text|Cuprum|Dancing+Script|Dosis|Droid+Sans|Droid+Serif|EB+Garamond|Exo|Exo+2|Faustina|Fira+Sans|Fjalla+One|Francois+One|Gloria+Hallelujah|Hind|Inconsolata|Indie+Flower|Josefin+Sans|Julee|Karla|Lato|Libre+Baskerville|Libre+Franklin|Lobster|Lora|Mada|Manuale|Maven+Pro|Merriweather|Merriweather+Sans|Montserrat|Montserrat+Subrayada|Mukta+Vaani|Muli|Noto+Sans|Noto+Serif|Nunito|Open+Sans|Open+Sans+Condensed:300|Oswald|Oxygen|PT+Sans|PT+Sans+Caption|PT+Sans+Narrow|PT+Serif|Pacifico|Passion+One|Pathway+Gothic+One|Play|Playfair+Display|Poppins|Questrial|Quicksand|Raleway|Roboto|Roboto+Condensed|Roboto+Mono|Roboto+Slab|Ropa+Sans|Rubik|Saira|Saira+Condensed|Saira+Extra+Condensed|Saira+Semi+Condensed|Sedgwick+Ave|Sedgwick+Ave+Display|Shadows+Into+Light|Signika|Slabo+27px|Source+Code+Pro|Source+Sans+Pro|Spectral|Titillium+Web|Ubuntu|Ubuntu+Condensed|Varela+Round|Vollkorn|Work+Sans|Yanone+Kaffeesatz|Zilla+Slab|Zilla+Slab+Highlight);
+@import 'tailwindcss';
+* {
+  box-sizing: border-box;
+  font-family: "Nunito Sans", sans-serif;
+
+}
+
+
+
+.bg-color {
+  background-color: #fefcfe;
+}
+
+body {
+
+  
+}
+
+html,
+body,
+#root {
+
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  overflow-y: auto; 
+  left: 0;
+}
+
+.bg-cyan {
+  background-color: #17e1d3;
+}
+
+.color-cyan {
+  color: #17e1d3;
+}
+
+a{
+  display: inline-block; /* Para que el enlace se comporte como un bloque */
+  text-decoration: none; /* Eliminar subrayado predeterminado */
+  color: inherit; /* Heredar el color del texto de su contenedor */
+  padding: 0; /* Eliminar relleno predeterminado */
+  margin: 0; /* Eliminar margen predeterminado */
+  background: none; /* Eliminar fondo predeterminado */
+  border: none; /* Eliminar borde predeterminado */
+}
+
+.bg-lighter-blue {
+  background-color: #138eda;
+}
+.color-lighter-blue {
+  color: #138eda;
+}
+.bg-seablue {
+  background-color: #1862bb;
+}
+.color-seablue {
+  color: #1862bb;
+}
+.bg-darkblue {
+  background-color: #1c1276;
+}
+.color-darkblue {
+  color: #1c1276;
+}
+
+
+.bg-red {
+  background-color: red;
+}
+
+.bg-light-blue {
+  background-color: #3289ef;
+}
+
+.color-light-blue {
+  background-color: #3289ef;
+}
+
+.color-red {
+  color: red;
+}
+
+.bg-gray {
+  background-color: #536471;
+}
+
+.color-gray {
+  color: #536471;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

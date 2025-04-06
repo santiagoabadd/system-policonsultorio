@@ -15,5 +15,4 @@ public class PacienteRequest {
     private String telefono;
     private String direccion;
     private String Dni;
-    private List<TurnoResponse> turnos;
 }

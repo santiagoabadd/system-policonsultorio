@@ -1,19 +1,23 @@
 package com.santidev.policonsultorio_service.controllers;
 
+import com.santidev.policonsultorio_service.model.dtos.AvailableRequest;
 import com.santidev.policonsultorio_service.model.dtos.TurnoRequest;
 import com.santidev.policonsultorio_service.model.dtos.TurnoResponse;
 import com.santidev.policonsultorio_service.model.entities.Turno;
 import com.santidev.policonsultorio_service.services.TurnoService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Controller
-@RequestMapping("/api/policonsultorio/turno")
+@RestController
+@RequestMapping("/turno")
 @RequiredArgsConstructor
 public class TurnoController {
 
@@ -37,6 +41,12 @@ public class TurnoController {
         turnoService.addTurno(turnoRequest);
     }
 
+    @PostMapping("/available")
+    public List<LocalDateTime> getAvailableSlots(
+            @RequestBody AvailableRequest request
+    ) {
+        return turnoService.getAvailableTimeSlots(request);
+    }
 
 
 }
