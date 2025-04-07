@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AuthForm from "../auth/AuthForm";
 
-export default function AuthPage() {
+export const AuthPage: React.FC = () => {
 
     
     

@@ -15,12 +15,12 @@ services:
     command: -p 5434
 
   ### MySQL database for policonsultorio-service
-  db-clinica:
-    container_name: db-clinica
+  db-clinic:
+    container_name: db-clinic
     image: mysql:8.0.33
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: clinica_db
+      MYSQL_DATABASE: clinic_db
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
     ports:

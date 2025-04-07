@@ -7,8 +7,12 @@ import { HomePage } from "./pages/HomePage";
 
 import './sass/index.scss';
 import ProtectedRoute from './ProtectedRoute';
-import AuthPage from "./pages/AuthPage";
-import TurnoPage from './pages/TurnoPage';
+import {AuthPage} from "./pages/AuthPage";
+import {AppointmentPageP} from './pages/AppointmentPageP';
+import { SpecialtyMenuPage } from './pages/SpecialtyMenuPage';
+import { PatientsPage } from './pages/PatientsPage';
+import { PatientPage } from './pages/PatientPage';
+import { PatientFormPage } from './pages/PatientFormPage';
 
 const theme: Theme = {
   colors: {
@@ -43,10 +47,42 @@ export const App = () => {
             }
           />
           <Route
-            path="/turno"
+            path="/turno/:specialty"
             element={
               <ProtectedRoute>
-                <TurnoPage/>
+                <AppointmentPageP/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/menuEspecialidad"
+            element={
+              <ProtectedRoute>
+                <SpecialtyMenuPage/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/pacientes"
+            element={
+              <ProtectedRoute>
+                <PatientsPage/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/paciente/:id"
+            element={
+              <ProtectedRoute>
+                <PatientPage/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/paciente/form"
+            element={
+              <ProtectedRoute>
+                <PatientFormPage/>
               </ProtectedRoute>
             }
           />

@@ -31,8 +31,6 @@ export default function AuthForm() {
             </button>
           </div>
         </div>
-
-        {/* Tab Content */}
         <div className="overflow-hidden rounded-xl bg-white shadow-lg">
           {activeTab === "login" ? <LoginForm /> : <RegisterForm />}
         </div>

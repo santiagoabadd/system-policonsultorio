@@ -14,6 +14,6 @@ import java.time.LocalDate;
 public class AvailableRequest {
 
     private LocalDate date;
-    private long medicoId;
+    private long medicId;
 
 }

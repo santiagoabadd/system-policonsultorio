@@ -2,44 +2,52 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:8080';
 
-
 interface UserData {
-    userName: string;
-    firstName?:string;
-    lastName?:string;
-    email?: string;
-    password: string;
+  userName: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password: string;
+}
+
+interface User {
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 interface AuthResponse {
-    token: string;
-    user?: {
-    id: string;
-    userName: string;
-    firstName:string;
-    lastName:string;
-    email: string;
-  };
+  token: string;
+  user: User;
 }
 
+const api = axios.create({
+  baseURL: API_URL
+});
 
-const register = async (userData: UserData): Promise<AuthResponse> => {
-  try {
-    const response = await axios.post<AuthResponse>(`${API_URL}/api/user/register`, userData);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-    }
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw error.response?.data || { message: 'Registration failed' };
-    }
-    throw { message: 'Registration failed' };
+// Request interceptor to add auth token
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-};
+  return config;
+});
 
 
-const login = async (userData: UserData): Promise<string> => {
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 501) {
+      console.error('Service not implemented:', error.config.url);
+    }
+    return Promise.reject(error);
+  }
+);
+
+export const login = async (userData: UserData): Promise<string> => {
   try {
     const response = await axios.post<string>(`${API_URL}/api/user/token`, userData);
     const token = response.data;
@@ -54,26 +62,62 @@ const login = async (userData: UserData): Promise<string> => {
   }
 };
 
-
-const logout = (): void => {
-  localStorage.removeItem('token');
+export const register = async (userData: UserData): Promise<AuthResponse> => {
+  try {
+    const response = await api.post<AuthResponse>('/api/user/register', userData);
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+    }
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw error.response?.data || { message: 'Registration failed' };
+    }
+    throw { message: 'Registration failed' };
+  }
 };
 
+export const logout = (): void => {
+  localStorage.removeItem('token');
+  delete api.defaults.headers.common['Authorization'];
+};
 
-const getCurrentUser = (): string | null => {
+export const getCurrentUser = (): string | null => {
   return localStorage.getItem('token');
 };
 
-
-const isAuthenticated = (): boolean => {
+export const validateToken = async (): Promise<boolean> => {
   const token = getCurrentUser();
-  return !!token;
+  if (!token) return false;
+
+  try {
+    const response = await api.get(`/api/user/validate`, {
+      params: { token }, // Agrega el token como parámetro de consulta
+    });
+    return response.status === 200;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 501) {
+      console.warn('Token validation service not implemented - proceeding with token');
+      return true; // O false dependiendo de tus requisitos
+    }
+    return false;
+  }
+};
+
+export const fetchCurrentUser = async (): Promise<User> => {
+  try {
+    const response = await api.get<User>('/api/user/user');
+    return response.data;
+  } catch (error) {
+    throw new Error('Failed to fetch user data');
+  }
 };
 
 export default {
-  register,
   login,
+  register,
   logout,
   getCurrentUser,
-  isAuthenticated,
+  validateToken,
+  fetchCurrentUser
 };
