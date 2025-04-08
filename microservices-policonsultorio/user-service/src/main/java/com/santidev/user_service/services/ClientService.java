@@ -34,7 +34,6 @@ public class ClientService {
                 .firstName(clientRequest.getFirstName())
                 .lastName(clientRequest.getLastName())
                 .email(clientRequest.getEmail())
-                .address(clientRequest.getAddress())
                 .build();
 
         clientRepository.save(client);
@@ -42,8 +41,8 @@ public class ClientService {
         log.info("Client added: {}", client);
     }
 
-    public String generateToken(String username) {
-        return jwtService.generateToken(username);
+    public String generateToken(Client client) {
+        return jwtService.generateToken(client);
     }
 
     public void validateToken(String token) {
@@ -65,6 +64,10 @@ public class ClientService {
         return mapToClientResponse(clientRepository.findByUserName(userName).get());
     }
 
+    public Client findByUserNameClient(String userName) {
+        return clientRepository.findByUserName(userName).orElseThrow(()-> new RuntimeException("No se econtro un cliente con esa id"));
+    }
+
 
 
     private ClientResponse mapToClientResponse(Client client) {
@@ -74,7 +77,6 @@ public class ClientService {
                 .firstName(client.getFirstName())
                 .lastName(client.getLastName())
                 .email(client.getEmail())
-                .address(client.getAddress())
                 .build();
     }
 }

@@ -1,7 +1,9 @@
 package com.santidev.policonsultorio_service.services;
 
+import com.santidev.policonsultorio_service.model.dtos.ClinicResponse;
 import com.santidev.policonsultorio_service.model.dtos.MedicRequest;
 import com.santidev.policonsultorio_service.model.dtos.MedicResponse;
+import com.santidev.policonsultorio_service.model.dtos.PatientResponse;
 import com.santidev.policonsultorio_service.model.entities.Medic;
 import com.santidev.policonsultorio_service.model.util.Mapper;
 import com.santidev.policonsultorio_service.repositories.ClinicRepository;
@@ -38,6 +40,13 @@ public class MedicService {
 
     }
 
+    public MedicResponse getByAuthId(String id){
+
+        return Mapper.mapToMedicResponse(medicRepository.findByAuthUserId(id));
+
+    }
+
+
     public void addMedic(MedicRequest medicRequest) {
         var medic = Medic.builder()
                 .name(medicRequest.getName())
@@ -49,6 +58,12 @@ public class MedicService {
         medicRepository.save(medic);
 
         log.info("medic added: {}", medic);
+    }
+
+    public List<MedicResponse> findMedicByPartialFields(
+            String partialName, String partialSpecialty) {
+        return medicRepository.findMedicsByPartialFields(
+                partialName, partialSpecialty).stream().map(Mapper::mapToMedicResponse).toList();
     }
 
 

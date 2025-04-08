@@ -2,6 +2,7 @@ import type React from "react"
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from "react"
 import { callApi } from "../../helpers/axios_helper"
+import { useAuth } from "../../auth/AuthContext";
 
 interface Patient {
   id: string
@@ -11,56 +12,94 @@ interface Patient {
   dni: string
 }
 
+interface Clinic {
+  name: string
+  id: string
+}
+
 export const Patients: React.FC = () => {
 
-    let navigate = useNavigate()
 
-    const [nameFilter, setNameFilter] = useState('');
-    const [dniFilter, setDniFilter] = useState('');
-    const [phoneFilter, setPhoneFilter] = useState('');
-    const [addressFilter, setAddressFilter] = useState('');
 
+
+
+  const { user } = useAuth();
+
+  let navigate = useNavigate()
+
+  const [nameFilter, setNameFilter] = useState('');
+  const [dniFilter, setDniFilter] = useState('');
+  const [phoneFilter, setPhoneFilter] = useState('');
+  const [addressFilter, setAddressFilter] = useState('');
+  const [clinic, setClinic] = useState<Clinic | null>(null)
 
   const [patients, setPatients] = useState<Patient[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-    
+
+  const fetchPatients = async () => {
     
 
-      const fetchPatients = async () => {
-        setIsLoading(true)
-        try {
-   
-          const response = await callApi(`/api/policonsultorio/patient/patients`,"GET",undefined,{
-            partialName: nameFilter || undefined,
-            partialDni: dniFilter || undefined,
-            partialPhone: phoneFilter || undefined,
-            partialAddress: addressFilter || undefined
-          })
-  
-          if (!response) {
-            throw new Error("Failed to fetch patients")
-          }
-  
-         
-          setPatients(response.data)
-        } catch (error) {
-          console.error("Error fetching patients:", error)
-        } finally {
-          setIsLoading(false)
-        }
+    setIsLoading(true)
+    try {
+
+      const response = await callApi(`/api/policonsultorio/patient/patients`, "GET", undefined, {
+        partialName: nameFilter || undefined,
+        partialDni: dniFilter || undefined,
+        partialPhone: phoneFilter || undefined,
+        partialAddress: addressFilter || undefined,
+        partialClinicId: clinic?.id || undefined
+      })
+
+      if (!response) {
+        throw new Error("Failed to fetch patients")
       }
+
+
+      setPatients(response.data)
+    } catch (error) {
+      console.error("Error fetching patients:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+
+
+  const fetchClinic = async () => {
   
+    try {
+
+      const response = await callApi(`/api/policonsultorio/clinic/authUserId/${user?.id}`, "GET")
+
+      if (!response) {
+        throw new Error("Failed to fetch client")
+      }
+
+      console.log(response.data)
+      setClinic(response.data)
+      console.log(clinic)
+    } catch (error) {
+      console.error("Error fetching patients:", error)
+    } 
+    console.log(clinic?.id)
+  }
 
   useEffect(() => {
-    
-    fetchPatients()
-  }, [nameFilter, dniFilter, phoneFilter, addressFilter])
+    if (user?.id) {
+      fetchClinic();
+    }
+  }, [user?.id]);
 
-  
+  useEffect(() => {
+
+    fetchPatients()
+  }, [nameFilter, dniFilter, phoneFilter, addressFilter,clinic])
+
+
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-  
+
     switch (name) {
       case 'nameFilter':
         setNameFilter(value);
@@ -72,23 +111,23 @@ export const Patients: React.FC = () => {
         setPhoneFilter(value);
         break;
       case 'addressilter':
-        setAddressFilter(value);  
+        setAddressFilter(value);
         break;
       default:
         break;
     }
   };
 
-  const handlePatientClick = (id: string)=>{
+  const handlePatientClick = (id: string) => {
     navigate(`/paciente/${id}`);
-};
- 
+  };
+
 
   return (
     <div className="container mx-auto py-10">
-      <button onClick={()=> navigate(-1)} className="mt-4 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md">
-                    Back
-                </button>
+      <button onClick={() => navigate(-1)} className="mt-4 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md">
+        Back
+      </button>
       <h1 className="text-3xl font-bold mb-6">Patients</h1>
 
       <div className="space-y-6">
@@ -153,7 +192,7 @@ export const Patients: React.FC = () => {
                 </div>
               </div>
 
-             
+
             </div>
           </div>
         </div>
@@ -197,7 +236,7 @@ export const Patients: React.FC = () => {
                 </tr>
               ) : (
                 patients.map((patient) => (
-                  <tr key={patient.id}  onClick={() =>  handlePatientClick(`${patient.id}`)}>
+                  <tr key={patient.id} onClick={() => handlePatientClick(`${patient.id}`)}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium">{patient.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{patient.dni}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{patient.phone}</td>

@@ -24,10 +24,8 @@ public class Client {
     private String lastName;
     private String email;
 
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    private Address address;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
 }

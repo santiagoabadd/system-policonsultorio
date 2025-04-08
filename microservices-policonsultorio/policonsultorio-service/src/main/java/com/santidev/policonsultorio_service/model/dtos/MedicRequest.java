@@ -11,5 +11,6 @@ public class MedicRequest {
     private String name;
     private String specialty;
     private long clinicId;
+    private String authUserId;
 
 }

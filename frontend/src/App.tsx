@@ -49,7 +49,7 @@ export const App = () => {
           <Route
             path="/turno/:specialty"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRole="RECEPCIONISTA">
                 <AppointmentPageP/>
               </ProtectedRoute>
             }
@@ -57,7 +57,7 @@ export const App = () => {
           <Route
             path="/menuEspecialidad"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRole="RECEPCIONISTA">
                 <SpecialtyMenuPage/>
               </ProtectedRoute>
             }
@@ -65,7 +65,7 @@ export const App = () => {
           <Route
             path="/pacientes"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRole="RECEPCIONISTA">
                 <PatientsPage/>
               </ProtectedRoute>
             }
@@ -81,11 +81,12 @@ export const App = () => {
           <Route
             path="/paciente/form"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute requiredRole="RECEPCIONISTA">
                 <PatientFormPage/>
               </ProtectedRoute>
             }
           />
+          
         
       </Routes>
     </ThemeProvider>

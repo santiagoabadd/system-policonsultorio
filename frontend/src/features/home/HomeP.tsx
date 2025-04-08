@@ -1,13 +1,19 @@
-import { Calendar, Users, User,  Home, PlusCircle, Activity } from "lucide-react"
+import { Calendar, Users, User, Home, PlusCircle, Activity } from "lucide-react"
+import { useEffect } from "react"
 
+
+import { useAuth } from "../../auth/AuthContext";
+    
 export const HomeP: React.FC = () => {
-  
 
- 
+  useEffect(() => {
+      console.log(user)
+    }, [])
 
+   const { user } = useAuth();
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      
+
       <main className="flex-grow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h2>
@@ -19,21 +25,21 @@ export const HomeP: React.FC = () => {
                   <Users className="h-6 w-6 text-blue-600" />
                 </div>
                 <div className="ml-5">
-                  <h3 className="text-lg font-medium text-gray-900">Patients</h3>
-                  <p className="text-sm text-gray-500 mt-1">Manage patient records</p>
+                  <h3 className="text-lg font-medium text-gray-900">Pacientes</h3>
+                  <p className="text-sm text-gray-500 mt-1">Administrar pacientes</p>
                 </div>
               </div>
               <div className="bg-gray-50 px-5 py-3 border-t border-gray-200">
                 <div className="flex justify-between">
                   <a href="/pacientes" className="text-sm font-medium text-blue-600 hover:text-blue-500">
-                    View all patients
+                    Ver pacientes
                   </a>
                   <a
                     href="/paciente/form"
                     className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
                   >
                     <PlusCircle className="h-4 w-4 mr-1" />
-                    Add new
+                    Añadir Paciente
                   </a>
                 </div>
               </div>
@@ -45,13 +51,13 @@ export const HomeP: React.FC = () => {
                   <Calendar className="h-6 w-6 text-green-600" />
                 </div>
                 <div className="ml-5">
-                  <h3 className="text-lg font-medium text-gray-900">Appointments</h3>
-                  <p className="text-sm text-gray-500 mt-1">Schedule and manage appointments</p>
+                  <h3 className="text-lg font-medium text-gray-900">Turnos</h3>
+                  <p className="text-sm text-gray-500 mt-1">Agendar y administrar turnos</p>
                 </div>
               </div>
               <div className="bg-gray-50 px-5 py-3 border-t border-gray-200">
                 <a href="/menuEspecialidad" className="text-sm font-medium text-green-600 hover:text-green-500">
-                  Schedule appointment
+                  Agendar un turno
                 </a>
               </div>
             </div>
@@ -62,14 +68,23 @@ export const HomeP: React.FC = () => {
                   <Activity className="h-6 w-6 text-purple-600" />
                 </div>
                 <div className="ml-5">
-                  <h3 className="text-lg font-medium text-gray-900">Specialties</h3>
-                  <p className="text-sm text-gray-500 mt-1">Browse medical specialties</p>
+                  <h3 className="text-lg font-medium text-gray-900">Medicos</h3>
+                  <p className="text-sm text-gray-500 mt-1">Buscar medicos</p>
                 </div>
               </div>
               <div className="bg-gray-50 px-5 py-3 border-t border-gray-200">
-                <a href="/menuEspecialidad" className="text-sm font-medium text-purple-600 hover:text-purple-500">
-                  View specialties
-                </a>
+                <div className="flex justify-between">
+                  <a href="/menuEspecialidad" className="text-sm font-medium text-purple-600 hover:text-purple-500">
+                    Ver medicos
+                  </a>
+                  <a
+                    href="/paciente/form"
+                    className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
+                  >
+                    <PlusCircle className="h-4 w-4 mr-1" />
+                    Registrar medico
+                  </a>
+                </div>
               </div>
             </div>
           </div>

@@ -21,7 +21,7 @@ public class Patient {
     private String name;
     private String phone;
     private String address;
-    private String Dni;
+    private String dni;
 
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
@@ -31,6 +31,21 @@ public class Patient {
     @ManyToMany(mappedBy = "patients")
     private List<Medic> medics = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "patients")
+    private List<Clinic> clinics = new ArrayList<>();
 
+    @Column(unique = true)
+    private String authUserId;
+
+
+    public void addClinic(Clinic clinic) {
+        this.clinics.add(clinic);
+        clinic.getPatients().add(this);
+    }
+
+    public void removeClinic(Clinic clinic) {
+        this.clinics.remove(clinic);
+        clinic.getPatients().remove(this);
+    }
 
 }

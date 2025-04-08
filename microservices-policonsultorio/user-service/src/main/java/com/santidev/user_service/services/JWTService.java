@@ -1,5 +1,6 @@
 package com.santidev.user_service.services;
 
+import com.santidev.user_service.model.entities.Client;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -44,9 +45,10 @@ public class JWTService {
                 .getBody();
     }
 
-    public String generateToken(String userName) {
+    public String generateToken(Client client) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
+        claims.put("role", client.getRole().name());
+        return createToken(claims, client.getUserName());
     }
 
     private String createToken(Map<String, Object> claims, String userName) {
@@ -55,7 +57,8 @@ public class JWTService {
                 .setSubject(userName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
-                .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     private Key getSignKey() {

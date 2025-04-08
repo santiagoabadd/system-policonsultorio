@@ -25,6 +25,12 @@ public class ClinicService {
 
     }
 
+    public ClinicResponse getByAuthId(String id){
+
+        return Mapper.mapToClinicResponse(clinicRepository.findByAuthUserId(id));
+
+    }
+
     public List<ClinicResponse> getAll(){
 
         return clinicRepository.findAll().stream().map(Mapper::mapToClinicResponse).toList();

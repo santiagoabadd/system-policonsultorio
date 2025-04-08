@@ -1,7 +1,13 @@
 import type React from "react"
-
+import { useEffect } from "react"
 import { useState, type FormEvent } from "react"
 import { callApi } from "../../helpers/axios_helper"
+import { useAuth } from "../../auth/AuthContext";
+
+interface Clinic {
+  name: string
+  id: string
+}
 
 export const PatientForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +15,7 @@ export const PatientForm: React.FC = () => {
     phone: "",
     address: "",
     dni: "",
+    clinicId: ""
   })
 
   const [errors, setErrors] = useState({
@@ -18,8 +25,46 @@ export const PatientForm: React.FC = () => {
     dni: "",
   })
 
+  const { user } = useAuth();
+  
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [clinic, setClinic] = useState<Clinic | null>(null)
+
+  const fetchClinic = async () => {
+    
+      try {
+  
+        const response = await callApi(`/api/policonsultorio/clinic/authUserId/${user?.id}`, "GET")
+  
+        if (!response) {
+          throw new Error("Failed to fetch client")
+        }
+  
+        console.log(response.data)
+        setClinic(response.data)
+        console.log(clinic)
+      } catch (error) {
+        console.error("Error fetching patients:", error)
+      } 
+      console.log(clinic?.id)
+    }
+
+    useEffect(() => {
+        if (user?.id) {
+          fetchClinic();
+        }
+      }, [user?.id]);
+
+      useEffect(() => {
+        if (clinic?.id) {
+          setFormData((prev) => ({
+            ...prev,
+            clinicId: clinic.id,
+          }))
+        }
+      }, [clinic])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -76,7 +121,7 @@ export const PatientForm: React.FC = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await callApi("/api/policonsultorio/patient/add","POST",formData)
+      const response = await callApi("/api/policonsultorio/patient/create","POST",formData)
 
       console.log("Patient registered:", formData)
       setSubmitSuccess(true)

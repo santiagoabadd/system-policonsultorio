@@ -16,6 +16,7 @@ public class PatientResponse {
     private String name;
     private String phone;
     private String address;
-    private String Dni;
+    private String dni;
     private List<AppointmentResponse> appointments;
+    private String authUserId;
 }

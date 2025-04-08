@@ -9,6 +9,7 @@ interface UserData {
   lastName?: string;
   email?: string;
   password: string;
+  role?:string
 }
 
 interface User {
@@ -17,6 +18,7 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
+  role:string
 }
 
 interface AuthResponse {
@@ -67,8 +69,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (userData: { userName: string; password: string }) => {
     try {
+      console.log("seteando")
       const { token, user } = await authService.login(userData);
       setToken(token);
+      console.log("seteando")
       setUser(user);
     } catch (error) {
       throw error;
@@ -119,7 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-// Create a custom hook for using the context
+
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

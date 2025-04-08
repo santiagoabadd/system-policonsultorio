@@ -17,6 +17,7 @@ public class Mapper {
                 .id(medic.getId())
                 .name(medic.getName())
                 .specialty(medic.getSpecialty())
+                .authUserId(medic.getAuthUserId())
                 .build();
     }
 
@@ -41,9 +42,10 @@ public class Mapper {
         return PatientResponse.builder()
                 .id(patient.getId())
                 .name(patient.getName())
-                .Dni(patient.getDni())
+                .dni(patient.getDni())
                 .address(patient.getAddress())
                 .phone(patient.getPhone())
+                .authUserId(patient.getAuthUserId())
                 .appointments(patient.getAppointments().stream().map(Mapper::mapToAppointmentResponse).toList())
                 .build();
     }

@@ -52,6 +52,7 @@ function LoginForm() {
     setError("")
 
     try {
+      console.log("seteando")
       await authService.login({ userName, password })
       window.location.href = "/"
     } catch (err: any) {

@@ -36,4 +36,9 @@ public class Medic {
     )
     private List<Patient> patients = new ArrayList<>();
 
+    @Column(unique = true)
+    private String authUserId;
+
+
+
 }

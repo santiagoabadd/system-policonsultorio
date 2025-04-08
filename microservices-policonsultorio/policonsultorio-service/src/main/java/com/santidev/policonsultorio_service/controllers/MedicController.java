@@ -3,6 +3,7 @@ package com.santidev.policonsultorio_service.controllers;
 
 import com.santidev.policonsultorio_service.model.dtos.MedicRequest;
 import com.santidev.policonsultorio_service.model.dtos.MedicResponse;
+import com.santidev.policonsultorio_service.model.dtos.PatientResponse;
 import com.santidev.policonsultorio_service.services.MedicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,13 @@ import java.util.List;
 public class MedicController {
 
     private final MedicService medicService;
+
+
+    @GetMapping("/authUserId/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public MedicResponse getByAuthUserId(@PathVariable("id") String id){
+        return medicService.getByAuthId(id);
+    }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -39,5 +47,15 @@ public class MedicController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createMedic(@RequestBody MedicRequest medicRequest){
         medicService.addMedic(medicRequest);
+    }
+
+    @GetMapping ("/medics")
+    public List<MedicResponse> getMedics(
+            @RequestParam(required = false) String partialName,
+            @RequestParam(required = false) String partialSpecialty)
+    {
+        return medicService.findMedicByPartialFields(
+                partialName,
+                partialSpecialty);
     }
 }

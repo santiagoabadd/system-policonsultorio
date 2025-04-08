@@ -12,5 +12,6 @@ public class MedicResponse {
 
     private String name;
     private String specialty;
+    private String authUserId;
 
 }

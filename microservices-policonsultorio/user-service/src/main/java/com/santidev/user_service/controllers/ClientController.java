@@ -68,7 +68,8 @@ public class ClientController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUserName(),authRequest.getPassword()));
 
         if(authentication.isAuthenticated()){
-            return this.clientService.generateToken(authRequest.getUserName());
+
+            return this.clientService.generateToken(clientService.findByUserNameClient(authRequest.getUserName()));
         }else{
             throw new RuntimeException("invalid access");
         }

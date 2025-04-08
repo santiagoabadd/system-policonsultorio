@@ -1,5 +1,6 @@
 package com.santidev.policonsultorio_service.controllers;
 
+import com.santidev.policonsultorio_service.model.dtos.ClinicResponse;
 import com.santidev.policonsultorio_service.model.dtos.PatientRequest;
 import com.santidev.policonsultorio_service.model.dtos.PatientResponse;
 import com.santidev.policonsultorio_service.services.PatientService;
@@ -39,13 +40,30 @@ public class PatientController {
             @RequestParam(required = false) String partialName,
             @RequestParam(required = false) String partialDni,
             @RequestParam(required = false) String partialPhone,
-            @RequestParam(required = false) String partialAddress)
+            @RequestParam(required = false) String partialAddress,
+            @RequestParam(required = false) String partialClinicId)
     {
         return patientService.findPatientByPartialFields(
                 partialName,
                 partialDni,
                 partialPhone,
-                partialAddress);
+                partialAddress,
+                Long.parseLong(partialClinicId));
+    }
+
+    @GetMapping("/authUserId/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public PatientResponse getByAuthUserId(@PathVariable("id") String id){
+        return patientService.getByAuthId(id);
+    }
+
+
+    @GetMapping ("/addPatient")
+    public void addPatientToClinic(
+            @RequestParam(required = false) Long clinicId,
+            @RequestParam(required = false) Long patientId)
+    {
+       patientService.addClinicToPatient(patientId,clinicId);
     }
 
 }

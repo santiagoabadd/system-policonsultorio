@@ -1,6 +1,7 @@
 import { useState } from "react"
 import {  Menu,  LogOut, Activity } from "lucide-react"
 import { useAuth } from "../../auth/AuthContext";
+import { useEffect } from "react"
 
 export const NavBar: React.FC= ()=>{
 
@@ -12,6 +13,9 @@ export const NavBar: React.FC= ()=>{
         setIsMobileMenuOpen(!isMobileMenuOpen)
       }
     
+    useEffect(() => {
+          console.log(user)
+        }, [user])
     
       const handleLogout = () => {
         logout()

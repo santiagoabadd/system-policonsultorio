@@ -8,6 +8,7 @@ interface UserData {
   lastName?: string;
   email?: string;
   password: string;
+  role: string;
 }
 
 interface User {
@@ -16,6 +17,7 @@ interface User {
   firstName: string;
   lastName: string;
   email: string;
+  role: string;
 }
 
 interface AuthResponse {

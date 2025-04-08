@@ -22,6 +22,12 @@ public class ClinicController {
         return clinicService.getById(id);
     }
 
+    @GetMapping("/authUserId/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ClinicResponse getByAuthUserId(@PathVariable("id") String id){
+        return clinicService.getByAuthId(id);
+    }
+
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<ClinicResponse> getAllClinic(){

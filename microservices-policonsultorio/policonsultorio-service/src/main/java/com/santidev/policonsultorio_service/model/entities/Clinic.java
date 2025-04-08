@@ -26,4 +26,15 @@ public class Clinic {
 
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "clinic_patient",
+            joinColumns = @JoinColumn(name = "clinic_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id")
+    )
+    private List<Patient> patients = new ArrayList<>();
+
+    @Column(unique = true)
+    private String authUserId;
 }
