@@ -40,6 +40,7 @@ public class AppointmentController {
     public List<LocalDateTime> getAvailableSlots(
             @RequestBody AvailableRequest request
     ) {
+        System.out.println(request);
         return appointmentService.getAvailableTimeSlots(request);
     }
 

@@ -16,4 +16,5 @@ public class AppointmentResponse {
     private LocalDateTime date;
     private MedicResponse medic;
     private ClinicResponse clinic;
+    private PatientResponseShort patient;
 }

@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
@@ -19,4 +21,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     boolean existsByMedicIdAndDate(Long medicId, LocalDateTime date);
 
+    List<Appointment> findByMedicIdAndClinicIdAndDateBetween(
+            long medicId,
+            long clinicId,
+            LocalDateTime start,
+            LocalDateTime end
+    );
 }

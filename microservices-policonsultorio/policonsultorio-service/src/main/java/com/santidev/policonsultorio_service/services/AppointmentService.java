@@ -4,16 +4,16 @@ import com.santidev.policonsultorio_service.model.dtos.AvailableRequest;
 import com.santidev.policonsultorio_service.model.dtos.AppointmentRequest;
 import com.santidev.policonsultorio_service.model.dtos.AppointmentResponse;
 import com.santidev.policonsultorio_service.model.entities.Appointment;
+import com.santidev.policonsultorio_service.model.entities.MedicSchedule;
 import com.santidev.policonsultorio_service.model.util.Mapper;
-import com.santidev.policonsultorio_service.repositories.ClinicRepository;
-import com.santidev.policonsultorio_service.repositories.MedicRepository;
-import com.santidev.policonsultorio_service.repositories.PatientRepository;
-import com.santidev.policonsultorio_service.repositories.AppointmentRepository;
+import com.santidev.policonsultorio_service.repositories.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ public class AppointmentService {
     private final MedicRepository medicRepository;
     private final ClinicRepository clinicRepository;
     private final PatientRepository patientRepository;
+    private final MedicScheduleRepository medicScheduleRepository;
 
     public AppointmentResponse getById(long id){
 
@@ -41,27 +42,45 @@ public class AppointmentService {
 
     }
 
+    public List<AppointmentResponse> getByMedicAndClinicAndDate(long medicId, long clinicId, LocalDate date){
+
+        return appointmentRepository.findByMedicIdAndClinicIdAndDateBetween(medicId,clinicId,date.atStartOfDay(),date.atTime(LocalTime.MAX)).stream().map(Mapper::mapToAppointmentResponse).toList();
+
+    }
+
+
+
+
     public List<LocalDateTime> getAvailableTimeSlots(AvailableRequest availableRequest) {
+        System.out.println("availableRequest "+availableRequest);
         List<LocalDateTime> availableSlots = new ArrayList<>();
-
-        // Generate all possible slots for the day
-        LocalDateTime start = LocalDateTime.of(availableRequest.getDate(), LocalTime.of(9, 0));
-        LocalDateTime end = LocalDateTime.of(availableRequest.getDate(), LocalTime.of(17, 0));
-
-        while (start.isBefore(end)) {
-            availableSlots.add(start);
-            start = start.plusMinutes(30);
+        DayOfWeek requestedDay = availableRequest.getDate().getDayOfWeek();
+        System.out.println("requestedDay "+requestedDay);
+        // Get medic's schedule for the given day
+        List<MedicSchedule> schedules = medicScheduleRepository.findByMedicIdAndDayOfWeek(
+                availableRequest.getMedicId(), requestedDay);
+        System.out.println(schedules);
+        if (schedules.isEmpty()) {
+            return availableSlots; // No schedule = no availability
         }
 
+        for (MedicSchedule schedule : schedules) {
+            LocalDateTime start = LocalDateTime.of(availableRequest.getDate(), schedule.getStartTime());
+            LocalDateTime end = LocalDateTime.of(availableRequest.getDate(), schedule.getEndTime());
 
+            while (start.isBefore(end)) {
+                availableSlots.add(start);
+                start = start.plusMinutes(30);
+            }
+        }
+
+        // Fetch already booked appointments
         List<Appointment> bookedAppointments = appointmentRepository.findByMedicIdAndDateBetween(
                 availableRequest.getMedicId(),
                 LocalDateTime.of(availableRequest.getDate(), LocalTime.MIN),
                 LocalDateTime.of(availableRequest.getDate(), LocalTime.MAX)
         );
 
-
-        // Remove booked slots from available slots
         bookedAppointments.forEach(appointment -> availableSlots.remove(appointment.getDate()));
 
         return availableSlots;
@@ -69,13 +88,15 @@ public class AppointmentService {
 
     public void addAppointment(AppointmentRequest appointmentRequest) {
 
-        // Validate time is on 30-minute interval
+        if (!isWithinSchedule(appointmentRequest.getMedicId(), appointmentRequest.getDate())) {
+            throw new IllegalArgumentException("Requested time is outside the medic's working hours");
+        }
+
         LocalDateTime requestedTime = appointmentRequest.getDate();
         if (requestedTime.getMinute() % 30 != 0) {
             throw new IllegalArgumentException("Appointments must be scheduled on 30-minute intervals");
         }
 
-        // Check for existing appointments at the exact same time
         boolean timeSlotTaken = appointmentRepository.existsByMedicIdAndDate(
                 appointmentRequest.getMedicId(),
                 requestedTime
@@ -85,14 +106,6 @@ public class AppointmentService {
             throw new IllegalStateException("Time slot " + requestedTime + " is already taken");
         }
 
-        // Optional: Check if time is within working hours (9:00-17:00)
-        LocalTime time = requestedTime.toLocalTime();
-        if (time.isBefore(LocalTime.of(9, 0))){
-            throw new IllegalArgumentException("Appointments cannot be before 9:00 AM");
-        }
-        if (time.isAfter(LocalTime.of(17, 0))) {
-            throw new IllegalArgumentException("Appointments cannot be after 5:00 PM");
-        }
 
 
 
@@ -110,5 +123,16 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
 
         log.info("appointment added: {}", appointment);
+    }
+
+    private boolean isWithinSchedule(Long medicId, LocalDateTime dateTime) {
+        DayOfWeek day = dateTime.getDayOfWeek();
+        LocalTime time = dateTime.toLocalTime();
+
+        List<MedicSchedule> schedules = medicScheduleRepository.findByMedicIdAndDayOfWeek(medicId, day);
+
+        return schedules.stream().anyMatch(s ->
+                !time.isBefore(s.getStartTime()) && time.isBefore(s.getEndTime())
+        );
     }
 }

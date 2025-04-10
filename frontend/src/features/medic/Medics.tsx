@@ -94,7 +94,7 @@ export const Medics: React.FC = () => {
   }
 
   const handleDoctorClick = (id: string) => {
-    navigate(`/medic/${id}`)
+    navigate(`/medico/${id}`)
   }
 
   return (

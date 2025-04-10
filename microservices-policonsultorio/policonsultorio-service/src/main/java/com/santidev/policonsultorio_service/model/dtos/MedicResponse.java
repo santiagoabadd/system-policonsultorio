@@ -2,6 +2,8 @@ package com.santidev.policonsultorio_service.model.dtos;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,5 +15,6 @@ public class MedicResponse {
     private String name;
     private String specialty;
     private String authUserId;
+    private List<MedicScheduleResponse> schedule;
 
 }

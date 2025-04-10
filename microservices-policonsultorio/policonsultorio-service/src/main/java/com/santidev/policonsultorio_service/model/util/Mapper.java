@@ -1,13 +1,7 @@
 package com.santidev.policonsultorio_service.model.util;
 
-import com.santidev.policonsultorio_service.model.dtos.ClinicResponse;
-import com.santidev.policonsultorio_service.model.dtos.MedicResponse;
-import com.santidev.policonsultorio_service.model.dtos.PatientResponse;
-import com.santidev.policonsultorio_service.model.dtos.AppointmentResponse;
-import com.santidev.policonsultorio_service.model.entities.Clinic;
-import com.santidev.policonsultorio_service.model.entities.Medic;
-import com.santidev.policonsultorio_service.model.entities.Patient;
-import com.santidev.policonsultorio_service.model.entities.Appointment;
+import com.santidev.policonsultorio_service.model.dtos.*;
+import com.santidev.policonsultorio_service.model.entities.*;
 
 public class Mapper {
 
@@ -18,6 +12,7 @@ public class Mapper {
                 .name(medic.getName())
                 .specialty(medic.getSpecialty())
                 .authUserId(medic.getAuthUserId())
+                .schedule(medic.getSchedule().stream().map(Mapper::mapToMedicScheduleResponse).toList())
                 .build();
     }
 
@@ -35,6 +30,7 @@ public class Mapper {
                 .state(appointment.getState())
                 .clinic(mapToClinicResponse(appointment.getClinic()))
                 .medic(mapToMedicResponse(appointment.getMedic()))
+                .patient(mapToPatientResponseShort(appointment.getPatient()))
                 .build();
     }
 
@@ -47,6 +43,26 @@ public class Mapper {
                 .phone(patient.getPhone())
                 .authUserId(patient.getAuthUserId())
                 .appointments(patient.getAppointments().stream().map(Mapper::mapToAppointmentResponse).toList())
+                .build();
+    }
+
+    public static PatientResponseShort mapToPatientResponseShort(Patient patient) {
+        return PatientResponseShort.builder()
+                .id(patient.getId())
+                .name(patient.getName())
+                .dni(patient.getDni())
+                .address(patient.getAddress())
+                .phone(patient.getPhone())
+                .build();
+    }
+
+
+    public static MedicScheduleResponse mapToMedicScheduleResponse(MedicSchedule medicSchedule) {
+        return MedicScheduleResponse.builder()
+                .id(medicSchedule.getId())
+                .startTime(medicSchedule.getStartTime())
+                .endTime(medicSchedule.getEndTime())
+                .dayOfWeek(medicSchedule.getDayOfWeek())
                 .build();
     }
 }

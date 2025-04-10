@@ -1,22 +1,33 @@
 import { useState, useEffect } from "react"
-import {AppointmentCreator} from "./appointment-creator"
-import {callApi} from "../../helpers/axios_helper"
+import { AppointmentCreator } from "./appointment-creator"
+import { callApi } from "../../helpers/axios_helper"
+
 
 interface SpecialtyProps {
   specialty: string
 
 }
 
+interface MedicScheduleResponse {
+  id: number
+  dayOfWeek: string
+  startTime: string
+  endTime: string
+}
 
 interface MedicoInfo {
-    id:string
-    name: string
-    specialty: string
+  id: string
+  name: string
+  specialty: string
+  schedule: MedicScheduleResponse[]
+}
 
-  }
 
-export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
-  const [medicId, setMedicId] = useState<string>("1")
+
+
+
+export const AppointmentPage: React.FC<SpecialtyProps> = ({ specialty }) => {
+  const [medicId, setMedicId] = useState<string>("")
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0])
   const [availableSlots, setAvailableSlots] = useState<string[]>([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -31,6 +42,7 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
         const response = await callApi(`/api/policonsultorio/medic/specialty/${specialty}`)
         if (response) {
           setMedicos(response.data);
+          console.log(response.data)
         } else {
           console.error("Error en la respuesta");
         }
@@ -38,7 +50,7 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
         console.error("Error fetching doctors:", err);
       }
     };
-  
+
     fetchMedics();
   }, []);
 
@@ -48,14 +60,14 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
     setError(null)
 
     const payload = {
-      date:selectedDate,
+      date: selectedDate,
       medicId: medicId
     }
 
     try {
-  
+      console.log(medicos)
       const response = await callApi(
-        `/api/policonsultorio/appointment/available`,'POST',payload)
+        `/api/policonsultorio/appointment/available`, 'POST', payload)
 
       if (!response) {
         throw new Error("Error")
@@ -71,8 +83,16 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
   }
 
   useEffect(() => {
-    fetchAvailableSlots()
-  }, [medicId, selectedDate])
+    if (medicId) {
+      fetchAvailableSlots();
+      console.log("Medicos:", medicos);
+console.log("MedicId:",medicId);
+console.log("Médico encontrado:", medicos.find((m) => m.id === medicId));
+      console.log(medicos.find((m) => m.id === medicId))
+    } else {
+      setAvailableSlots([]);
+    }
+  }, [medicId, selectedDate]);
 
   const handleCreateAppointment = async (slot: string) => {
     setLoading(true)
@@ -81,12 +101,12 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
       const payload = {
         state: "PENDIENTE",
         date: slot,
-        clinicId: 1, 
+        clinicId: 1,
         medicId: Number.parseInt(medicId),
         patientId: 1,
       }
 
-      const response = await callApi("/api/policonsultorio/appointment/create","POST",payload)
+      const response = await callApi("/api/policonsultorio/appointment/create", "POST", payload)
 
       if (!response) {
         throw new Error(`Error: `)
@@ -121,6 +141,9 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
               onChange={(e) => setMedicId(e.target.value)}
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
             >
+              <option value="" disabled hidden>
+                Selecciona un médico
+              </option>
               {medicos.map((doctor) => (
                 <option key={doctor.id} value={doctor.id}>
                   {doctor.name}
@@ -133,6 +156,27 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
             <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
               Seleccionar fecha
             </label>
+            {medicId && (
+              
+              <p className="text-sm text-gray-500 mb-2">
+                Días disponibles: {
+                  medicos.find((m) => m.id === medicId)?.schedule
+                    .map(s => {
+                      const dias: Record<string, string> = {
+                        MONDAY: "Lunes",
+                        TUESDAY: "Martes",
+                        WEDNESDAY: "Miércoles",
+                        THURSDAY: "Jueves",
+                        FRIDAY: "Viernes",
+                        SATURDAY: "Sábado",
+                        SUNDAY: "Domingo",
+                      }
+                      return dias[s.dayOfWeek] || s.dayOfWeek
+                    })
+                    .join(", ")
+                }
+              </p>
+            )}
             <input
               type="date"
               id="date"
@@ -154,7 +198,7 @@ export const AppointmentPage: React.FC<SpecialtyProps> = ({specialty}) => {
       ) : (
         <AppointmentCreator
           doctorId={medicId}
-          doctorName={medicos.find((d) => d.id === medicId)?.name || ""}
+          doctorName={medicos.find((m) => m.id === medicId)?.name || ""}
           selectedDate={selectedDate}
           availableSlots={availableSlots}
           onCreateAppointment={handleCreateAppointment}

@@ -16,6 +16,7 @@ import { PatientFormPage } from './pages/PatientFormPage';
 import { MedicFormPage } from './pages/MedicFormPage';
 import { Medics } from './features/medic/Medics';
 import { MedicsPage } from './pages/MedicsPage';
+import { MedicPage } from './pages/MedicPage';
 
 const theme: Theme = {
   colors: {
@@ -103,7 +104,16 @@ export const App = () => {
           path="/medicos"
           element={
             <ProtectedRoute requiredRole="RECEPCIONISTA">
-              <MedicsPage/>
+              <MedicsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/medico/:id"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <MedicPage />
             </ProtectedRoute>
           }
         />

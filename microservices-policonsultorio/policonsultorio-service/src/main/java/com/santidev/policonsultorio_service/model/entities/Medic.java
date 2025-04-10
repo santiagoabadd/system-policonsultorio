@@ -24,6 +24,9 @@ public class Medic {
     @ManyToMany(mappedBy = "medics")
     private List<Clinic> clinics = new ArrayList<>();
 
+    @OneToMany(mappedBy = "medic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MedicSchedule> schedule = new ArrayList<>();
+
     @OneToMany(mappedBy = "medic", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();
 
