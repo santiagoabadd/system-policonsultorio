@@ -58,7 +58,7 @@ public class PatientController {
     }
 
 
-    @GetMapping ("/addPatient")
+    @PostMapping ("/addPatient")
     public void addPatientToClinic(
             @RequestParam(required = false) Long clinicId,
             @RequestParam(required = false) Long patientId)

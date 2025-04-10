@@ -46,16 +46,30 @@ public class MedicController {
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public void createMedic(@RequestBody MedicRequest medicRequest){
+        System.out.println(medicRequest.getAuthUserId());
+        System.out.println(medicRequest.getAuthUserId());
+        System.out.println(medicRequest.getAuthUserId());
+        System.out.println(medicRequest.getAuthUserId());
         medicService.addMedic(medicRequest);
     }
 
     @GetMapping ("/medics")
     public List<MedicResponse> getMedics(
             @RequestParam(required = false) String partialName,
-            @RequestParam(required = false) String partialSpecialty)
+            @RequestParam(required = false) String partialSpecialty,
+            @RequestParam(required = false) String partialClinicId)
     {
         return medicService.findMedicByPartialFields(
                 partialName,
-                partialSpecialty);
+                partialSpecialty,
+                Long.parseLong(partialClinicId));
+    }
+
+    @PostMapping ("/addMedic")
+    public void addMedicToClinic(
+            @RequestParam(required = false) Long clinicId,
+            @RequestParam(required = false) Long medicId)
+    {
+        medicService.addClinicToMedic(medicId,clinicId);
     }
 }

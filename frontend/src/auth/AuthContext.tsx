@@ -32,7 +32,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (userData: { userName: string; password: string }) => Promise<void>;
-  register: (userData: UserData) => Promise<AuthResponse>;
+  register: (userData: UserData) => Promise<User>;
   logout: () => void;
   validateToken: () => Promise<boolean>;
 }
@@ -82,8 +82,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (userData: UserData) => {
     try {
       const response = await authService.register(userData);
-      setToken(response.token);
-      setUser(response.user);
+
+      
       return response;
     } catch (error) {
       throw error;

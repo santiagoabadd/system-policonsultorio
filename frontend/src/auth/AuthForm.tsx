@@ -159,6 +159,7 @@ function LoginForm() {
 
 function RegisterForm() {
   const [userName, setUserName] = useState<string>("")
+  const [role, setRole] = useState<string>("PACIENTE")
   const [firstName, setFirstName] = useState<string>("")
   const [lastName, setLastName] = useState<string>("")
   const [email, setEmail] = useState<string>("")
@@ -173,7 +174,7 @@ function RegisterForm() {
     setError("")
 
     try {
-      await authService.register({ userName, firstName, lastName, email, password })
+      await authService.register({ userName, firstName, lastName, email, password, role})
       window.location.href = "/login"
     } catch (err: any) {
       setError(err.message || "Registration failed")

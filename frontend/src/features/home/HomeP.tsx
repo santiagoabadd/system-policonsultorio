@@ -3,14 +3,14 @@ import { useEffect } from "react"
 
 
 import { useAuth } from "../../auth/AuthContext";
-    
+
 export const HomeP: React.FC = () => {
 
   useEffect(() => {
-      console.log(user)
-    }, [])
+    console.log(user?.role)
+  }, [])
 
-   const { user } = useAuth();
+  const { user } = useAuth();
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
 
@@ -34,13 +34,18 @@ export const HomeP: React.FC = () => {
                   <a href="/pacientes" className="text-sm font-medium text-blue-600 hover:text-blue-500">
                     Ver pacientes
                   </a>
-                  <a
-                    href="/paciente/form"
-                    className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
-                  >
-                    <PlusCircle className="h-4 w-4 mr-1" />
-                    Añadir Paciente
-                  </a>
+                  <div className="flex flex-row items-center">
+                  <PlusCircle className="h-4 w-4 mr-1" />
+                    <a
+                      href="/paciente/form"
+                      className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
+                    >
+                      
+                      Añadir Paciente
+                    </a>
+                    
+                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -74,16 +79,19 @@ export const HomeP: React.FC = () => {
               </div>
               <div className="bg-gray-50 px-5 py-3 border-t border-gray-200">
                 <div className="flex justify-between">
-                  <a href="/menuEspecialidad" className="text-sm font-medium text-purple-600 hover:text-purple-500">
-                    Ver medicos
+                  <a href="/medicos" className="text-sm font-medium text-purple-600 hover:text-purple-500">
+                    Ver medicos de {user?.userName}
                   </a>
+                  <div className="flex flex-row items-center">
+                  <PlusCircle className="h-4 w-4 mr-1" />
                   <a
-                    href="/paciente/form"
+                    href="/medic/form"
                     className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
                   >
-                    <PlusCircle className="h-4 w-4 mr-1" />
+                   
                     Registrar medico
                   </a>
+                  </div>
                 </div>
               </div>
             </div>

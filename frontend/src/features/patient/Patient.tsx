@@ -73,7 +73,6 @@ export const Patient: React.FC<PatientProps> = (id) => {
         navigate(-1);
     }
 
-    // Function to get status color based on appointment state
     const getStatusColor = (state: string) => {
         switch (state.toLowerCase()) {
             case "completed":

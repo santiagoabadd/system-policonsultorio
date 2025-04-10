@@ -236,7 +236,7 @@ export const Patients: React.FC = () => {
                 </tr>
               ) : (
                 patients.map((patient) => (
-                  <tr key={patient.id} onClick={() => handlePatientClick(`${patient.id}`)}>
+                  <tr key={patient.id} className="cursor-pointer hover:bg-gray-50" onClick={() => handlePatientClick(`${patient.id}`)}>
                     <td className="px-6 py-4 whitespace-nowrap font-medium">{patient.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{patient.dni}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{patient.phone}</td>

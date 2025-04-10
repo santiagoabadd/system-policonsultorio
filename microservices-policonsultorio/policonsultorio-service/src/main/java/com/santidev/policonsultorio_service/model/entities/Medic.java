@@ -21,9 +21,8 @@ public class Medic {
     private String name;
     private String specialty;
 
-    @ManyToOne
-    @JoinColumn(name = "clinic_id")
-    private Clinic clinic;
+    @ManyToMany(mappedBy = "medics")
+    private List<Clinic> clinics = new ArrayList<>();
 
     @OneToMany(mappedBy = "medic", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();
@@ -39,6 +38,14 @@ public class Medic {
     @Column(unique = true)
     private String authUserId;
 
+    public void addClinic(Clinic clinic) {
+        this.clinics.add(clinic);
+        clinic.getMedics().add(this);
+    }
 
+    public void removeClinic(Clinic clinic) {
+        this.clinics.remove(clinic);
+        clinic.getMedics().remove(this);
+    }
 
 }

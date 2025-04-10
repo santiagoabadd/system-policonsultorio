@@ -7,12 +7,15 @@ import { HomePage } from "./pages/HomePage";
 
 import './sass/index.scss';
 import ProtectedRoute from './ProtectedRoute';
-import {AuthPage} from "./pages/AuthPage";
-import {AppointmentPageP} from './pages/AppointmentPageP';
+import { AuthPage } from "./pages/AuthPage";
+import { AppointmentPageP } from './pages/AppointmentPageP';
 import { SpecialtyMenuPage } from './pages/SpecialtyMenuPage';
 import { PatientsPage } from './pages/PatientsPage';
 import { PatientPage } from './pages/PatientPage';
 import { PatientFormPage } from './pages/PatientFormPage';
+import { MedicFormPage } from './pages/MedicFormPage';
+import { Medics } from './features/medic/Medics';
+import { MedicsPage } from './pages/MedicsPage';
 
 const theme: Theme = {
   colors: {
@@ -37,57 +40,75 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyle />
       <Routes>
-        <Route path="/login" element={<AuthPage/>} />
+        <Route path="/login" element={<AuthPage />} />
         <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <HomePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/turno/:specialty"
-            element={
-              <ProtectedRoute requiredRole="RECEPCIONISTA">
-                <AppointmentPageP/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/menuEspecialidad"
-            element={
-              <ProtectedRoute requiredRole="RECEPCIONISTA">
-                <SpecialtyMenuPage/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/pacientes"
-            element={
-              <ProtectedRoute requiredRole="RECEPCIONISTA">
-                <PatientsPage/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/paciente/:id"
-            element={
-              <ProtectedRoute>
-                <PatientPage/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/paciente/form"
-            element={
-              <ProtectedRoute requiredRole="RECEPCIONISTA">
-                <PatientFormPage/>
-              </ProtectedRoute>
-            }
-          />
-          
-        
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/turno/:specialty"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <AppointmentPageP />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/menuEspecialidad"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <SpecialtyMenuPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pacientes"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <PatientsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/paciente/:id"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <PatientPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/paciente/form"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <PatientFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/medico/form"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <MedicFormPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/medicos"
+          element={
+            <ProtectedRoute requiredRole="RECEPCIONISTA">
+              <MedicsPage/>
+            </ProtectedRoute>
+          }
+        />
+
+
       </Routes>
     </ThemeProvider>
   );

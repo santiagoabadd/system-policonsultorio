@@ -15,9 +15,12 @@ public interface MedicRepository extends JpaRepository<Medic, Long> {
     List<Medic> findBySpecialty(String specialty);
 
     @Query("SELECT DISTINCT m FROM Medic m " +
+            "LEFT JOIN m.clinics c " +
             "WHERE (:partialName IS NULL OR m.name LIKE %:partialName%) " +
-            "AND (:partialSpecialty IS NULL OR m.specialty LIKE %:partialSpecialty%) ")
+            "AND (:partialSpecialty IS NULL OR m.specialty LIKE %:partialSpecialty%) "+
+            "AND (:clinicId IS NULL OR c.id = :clinicId)")
     List<Medic> findMedicsByPartialFields(
             @Param("partialName") String partialName,
-            @Param("partialSpecialty") String partialSpecialty);
+            @Param("partialSpecialty") String partialSpecialty,
+            @Param("clinicId") Long clinicId);
 }

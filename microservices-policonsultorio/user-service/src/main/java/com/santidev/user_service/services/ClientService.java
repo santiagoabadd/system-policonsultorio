@@ -5,6 +5,7 @@ package com.santidev.user_service.services;
 import com.santidev.user_service.model.dtos.ClientRequest;
 import com.santidev.user_service.model.dtos.ClientResponse;
 import com.santidev.user_service.model.entities.Client;
+import com.santidev.user_service.model.entities.Role;
 import com.santidev.user_service.repositories.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,18 +28,19 @@ public class ClientService {
     private final JWTService jwtService;
 
 
-    public void addClient(ClientRequest clientRequest) {
+    public ClientResponse addClient(ClientRequest clientRequest) {
         var client = Client.builder()
                 .userName((clientRequest.getUserName()))
                 .password(passwordEncoder.encode(clientRequest.getPassword()))
                 .firstName(clientRequest.getFirstName())
                 .lastName(clientRequest.getLastName())
                 .email(clientRequest.getEmail())
+                .role(Role.valueOf(clientRequest.getRole().toUpperCase()))
                 .build();
 
-        clientRepository.save(client);
+        Client clientResponse=clientRepository.save(client);
 
-        log.info("Client added: {}", client);
+        return mapToClientResponse(clientResponse);
     }
 
     public String generateToken(Client client) {
@@ -77,6 +79,7 @@ public class ClientService {
                 .firstName(client.getFirstName())
                 .lastName(client.getLastName())
                 .email(client.getEmail())
+                .role(client.getRole().toString())
                 .build();
     }
 }

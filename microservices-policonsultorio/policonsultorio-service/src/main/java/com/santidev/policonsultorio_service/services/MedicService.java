@@ -1,17 +1,18 @@
 package com.santidev.policonsultorio_service.services;
 
-import com.santidev.policonsultorio_service.model.dtos.ClinicResponse;
-import com.santidev.policonsultorio_service.model.dtos.MedicRequest;
-import com.santidev.policonsultorio_service.model.dtos.MedicResponse;
-import com.santidev.policonsultorio_service.model.dtos.PatientResponse;
+import com.santidev.policonsultorio_service.model.dtos.*;
+import com.santidev.policonsultorio_service.model.entities.Clinic;
 import com.santidev.policonsultorio_service.model.entities.Medic;
+import com.santidev.policonsultorio_service.model.entities.Patient;
 import com.santidev.policonsultorio_service.model.util.Mapper;
 import com.santidev.policonsultorio_service.repositories.ClinicRepository;
 import com.santidev.policonsultorio_service.repositories.MedicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,24 +47,41 @@ public class MedicService {
 
     }
 
-
+    @Transactional
     public void addMedic(MedicRequest medicRequest) {
+        Clinic clinic = clinicRepository.findById(medicRequest.getClinicId())
+                .orElseThrow(() -> new RuntimeException("Clínica no encontrada"));
+
         var medic = Medic.builder()
                 .name(medicRequest.getName())
                 .specialty(medicRequest.getSpecialty())
-                .clinic(clinicRepository.findById(medicRequest.getClinicId())
-                        .orElseThrow(()-> new RuntimeException("Clinic not found with id  "+medicRequest.getClinicId())))
+                .clinics(new ArrayList<>())
+                .authUserId(medicRequest.getAuthUserId())
                 .build();
+
+        medic.addClinic(clinic);
 
         medicRepository.save(medic);
 
         log.info("medic added: {}", medic);
     }
 
+    @Transactional
+    public void addClinicToMedic(Long medicId, Long clinicId) {
+        Medic medic = medicRepository.findById(medicId).orElseThrow();
+        Clinic clinic = clinicRepository.findById(clinicId).orElseThrow();
+
+        medic.getClinics().add(clinic);
+        clinic.getMedics().add(medic);
+
+        medicRepository.save(medic);
+    }
+
+
     public List<MedicResponse> findMedicByPartialFields(
-            String partialName, String partialSpecialty) {
+            String partialName, String partialSpecialty,long clinicId) {
         return medicRepository.findMedicsByPartialFields(
-                partialName, partialSpecialty).stream().map(Mapper::mapToMedicResponse).toList();
+                partialName, partialSpecialty,clinicId).stream().map(Mapper::mapToMedicResponse).toList();
     }
 
 

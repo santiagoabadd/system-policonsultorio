@@ -64,12 +64,10 @@ export const login = async (userData: UserData): Promise<string> => {
   }
 };
 
-export const register = async (userData: UserData): Promise<AuthResponse> => {
+export const register = async (userData: UserData): Promise<User> => {
   try {
-    const response = await api.post<AuthResponse>('/api/user/register', userData);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-    }
+    const response = await api.post<User>('/api/user/register', userData);
+  
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

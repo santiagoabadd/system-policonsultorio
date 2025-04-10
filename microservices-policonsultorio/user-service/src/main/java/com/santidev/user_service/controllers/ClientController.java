@@ -58,8 +58,8 @@ public class ClientController {
     }
 
     @PostMapping("/register")
-    public void addNewUser(@RequestBody ClientRequest user) {
-        this.clientService.addClient(user);
+    public ClientResponse addNewUser(@RequestBody ClientRequest user) {
+        return this.clientService.addClient(user);
     }
 
     @PostMapping("/token")
