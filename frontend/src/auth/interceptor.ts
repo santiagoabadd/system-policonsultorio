@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {getCurrentUserToken} from './authService';
+import authService from './authService';
 
 axios.interceptors.request.use((config) => {
-  const token = getCurrentUserToken();
+  const token = authService.getCurrentUser();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

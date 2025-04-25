@@ -1,0 +1,35 @@
+
+#root {
+  transition: padding-left 0.3s ease-in-out;
+  min-height: 100vh;
+}
+
+body.sidebar-expanded #root {
+  padding-left: 16rem;
+}
+
+body.sidebar-collapsed #root {
+  padding-left: 5rem;
+}
+
+@media (max-width: 1023px) {
+  body.sidebar-expanded #root,
+  body.sidebar-collapsed #root {
+    padding-left: 0;
+  }
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+body.sidebar-open {
+  overflow: hidden;
+}
+
+@media (max-width: 1023px) {
+  #root {
+    padding-top: 1rem;
+  }
+}

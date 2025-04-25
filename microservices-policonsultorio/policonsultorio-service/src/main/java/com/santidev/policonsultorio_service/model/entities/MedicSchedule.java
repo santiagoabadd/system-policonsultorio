@@ -29,4 +29,9 @@ public class MedicSchedule {
     @ManyToOne
     @JoinColumn(name = "medic_id")
     private Medic medic;
+
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "clinic_id")
+    private Clinic clinic;
 }

@@ -21,10 +21,6 @@ interface User {
   role:string
 }
 
-interface AuthResponse {
-  token: string;
-  user: User;
-}
 
 interface AuthContextType {
   user: User | null;

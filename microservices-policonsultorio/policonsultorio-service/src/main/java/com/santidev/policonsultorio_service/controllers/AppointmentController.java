@@ -5,9 +5,11 @@ import com.santidev.policonsultorio_service.model.dtos.AppointmentRequest;
 import com.santidev.policonsultorio_service.model.dtos.AppointmentResponse;
 import com.santidev.policonsultorio_service.services.AppointmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,6 +44,25 @@ public class AppointmentController {
     ) {
         System.out.println(request);
         return appointmentService.getAvailableTimeSlots(request);
+    }
+
+    @GetMapping("/medic/{medicId}/date/{date}")
+    public List<AppointmentResponse> getAppointmentsByMedicAndDate(
+            @PathVariable Long medicId,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+    ) {
+
+        return appointmentService.getByMedicAndClinicAndDate(medicId, date);
+    }
+
+    @GetMapping("/medic/{medicId}/date/{date}/clinic/{clinicId}")
+    public List<AppointmentResponse> getAppointmentsByMedicDateAndClinic(
+            @PathVariable Long medicId,
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @PathVariable Long clinicId
+    ) {
+        List<AppointmentResponse> appointments = appointmentService.getByMedicAndClinicAndDate(medicId, clinicId, date);
+        return appointments;
     }
 
 

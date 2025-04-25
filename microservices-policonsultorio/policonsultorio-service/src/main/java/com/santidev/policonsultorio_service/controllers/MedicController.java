@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 @RestController
@@ -41,6 +42,14 @@ public class MedicController {
     @ResponseStatus(HttpStatus.OK)
     public List<MedicResponse> getAllMedic(@PathVariable("specialty") String specialty){
         return medicService.getBySpecialty(specialty);
+    }
+
+    @GetMapping("/{clinicId}/medics")
+    public List<MedicResponse> getMedicsByClinicAndDay(
+            @PathVariable Long clinicId,
+            @RequestParam DayOfWeek dayOfWeek
+    ) {
+        return medicService.findMedicsByClinicAndDay(clinicId,dayOfWeek);
     }
 
     @PostMapping("/create")

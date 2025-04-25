@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class MedicService {
 
     }
 
+    public List<MedicResponse> findMedicsByClinicAndDay(long clinicId, DayOfWeek dayOfWeek){
+
+        return medicRepository.findMedicsByClinicAndDay(clinicId,dayOfWeek).stream().map(Mapper::mapToMedicResponse).toList();
+
+    }
     public List<MedicResponse> getAll(){
 
         return medicRepository.findAll().stream().map(Mapper::mapToMedicResponse).toList();
@@ -83,6 +89,8 @@ public class MedicService {
         return medicRepository.findMedicsByPartialFields(
                 partialName, partialSpecialty,clinicId).stream().map(Mapper::mapToMedicResponse).toList();
     }
+
+
 
 
 

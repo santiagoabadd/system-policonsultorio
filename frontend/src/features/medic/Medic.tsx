@@ -3,7 +3,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { callApi } from "../../helpers/axios_helper"
-
+import { useAuth } from "../../auth/AuthContext";
 interface MedicScheduleResponse {
   id: number
   dayOfWeek: string
@@ -23,14 +23,19 @@ interface MedicProps {
   id: string
 }
 
+interface Clinic {
+  name: string
+  id: string
+}
+
 export const Medic: React.FC<MedicProps> = (id) => {
   const navigate = useNavigate()
 
- 
+   const { user } = useAuth();
   const [medic, setMedic] = useState<Medic | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
+  const [clinic, setClinic] = useState<Clinic | null>(null)
   const [showAddScheduleForm, setShowAddScheduleForm] = useState(false)
   const [isSubmittingSchedule, setIsSubmittingSchedule] = useState(false)
   const [scheduleSuccess, setScheduleSuccess] = useState(false)
@@ -67,6 +72,31 @@ export const Medic: React.FC<MedicProps> = (id) => {
       fetchMedicData()
     }
   }, [id])
+
+  const fetchClinic = async () => {
+    
+      try {
+  
+        const response = await callApi(`/api/policonsultorio/clinic/authUserId/${user?.id}`, "GET")
+  
+        if (!response) {
+          throw new Error("Failed to fetch client")
+        }
+  
+        console.log(response.data)
+        setClinic(response.data)
+        console.log(clinic)
+      } catch (error) {
+        console.error("Error fetching patients:", error)
+      } 
+      console.log(clinic?.id)
+    }
+  
+    useEffect(() => {
+      if (user?.id) {
+        fetchClinic();
+      }
+    }, [user?.id]);
 
   const handleBack = () => {
     navigate(-1)
@@ -168,6 +198,7 @@ export const Medic: React.FC<MedicProps> = (id) => {
         dayOfWeek: scheduleForm.dayOfWeek,
         startTime: scheduleForm.startTime,
         endTime: scheduleForm.endTime, 
+        clinicId: clinic?.id
 
       }
 

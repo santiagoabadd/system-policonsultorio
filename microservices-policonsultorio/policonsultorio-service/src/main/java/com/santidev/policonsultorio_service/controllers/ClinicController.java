@@ -28,6 +28,12 @@ public class ClinicController {
         return clinicService.getByAuthId(id);
     }
 
+    @GetMapping("/medic/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ClinicResponse> getByMedicId(@PathVariable("id") long id){
+        return clinicService.getByMedic(id);
+    }
+
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<ClinicResponse> getAllClinic(){

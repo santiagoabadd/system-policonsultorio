@@ -190,7 +190,7 @@ export const MedicForm: React.FC = () => {
                 name: formData.name,
                 specialty: formData.specialty,
                 clinicId: formData.clinicId,
-                authUserId: authUserId,
+                authUserId: null,
             }
 
             console.log(doctorData)

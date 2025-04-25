@@ -44,5 +44,8 @@ public class Clinic {
     @Column(unique = true)
     private String authUserId;
 
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)
+    private List<MedicSchedule> medicSchedule = new ArrayList<>();
+
 
 }

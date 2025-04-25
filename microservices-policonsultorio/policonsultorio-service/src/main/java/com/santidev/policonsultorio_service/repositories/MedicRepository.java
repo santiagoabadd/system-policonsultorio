@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 public interface MedicRepository extends JpaRepository<Medic, Long> {
@@ -23,4 +24,12 @@ public interface MedicRepository extends JpaRepository<Medic, Long> {
             @Param("partialName") String partialName,
             @Param("partialSpecialty") String partialSpecialty,
             @Param("clinicId") Long clinicId);
+
+    @Query("""
+        SELECT DISTINCT m
+        FROM Medic m
+        JOIN m.schedule s
+        WHERE s.clinic.id = :clinicId AND s.dayOfWeek = :dayOfWeek
+    """)
+    List<Medic> findMedicsByClinicAndDay(@Param("clinicId") Long clinicId, @Param("dayOfWeek") DayOfWeek dayOfWeek);
 }

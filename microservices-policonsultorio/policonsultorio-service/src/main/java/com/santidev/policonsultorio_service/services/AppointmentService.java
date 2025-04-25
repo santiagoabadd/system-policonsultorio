@@ -48,6 +48,12 @@ public class AppointmentService {
 
     }
 
+    public List<AppointmentResponse> getByMedicAndClinicAndDate(long medicId, LocalDate date){
+
+        return appointmentRepository.findByMedicIdAndDateBetween(medicId,date.atStartOfDay(),date.atTime(LocalTime.MAX)).stream().map(Mapper::mapToAppointmentResponse).toList();
+
+    }
+
 
 
 

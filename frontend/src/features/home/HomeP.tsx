@@ -85,7 +85,7 @@ export const HomeP: React.FC = () => {
                   <div className="flex flex-row items-center">
                   <PlusCircle className="h-4 w-4 mr-1" />
                   <a
-                    href="/medic/form"
+                    href="/medico/form"
                     className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center"
                   >
                    

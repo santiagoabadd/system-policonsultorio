@@ -1,5 +1,6 @@
 import React from 'react';
 import "./assets/global.css"
+import "./assets/sidebar.css" 
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { Theme } from "./utils/GlobalInterfaces";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -17,6 +18,8 @@ import { MedicFormPage } from './pages/MedicFormPage';
 import { Medics } from './features/medic/Medics';
 import { MedicsPage } from './pages/MedicsPage';
 import { MedicPage } from './pages/MedicPage';
+import { HomeMedicPage } from './pages/HomeMedicPage';
+import { SideBar } from './features/nav/SideBar';
 
 const theme: Theme = {
   colors: {
@@ -40,6 +43,7 @@ export const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
+      <SideBar />
       <Routes>
         <Route path="/login" element={<AuthPage />} />
         <Route
@@ -114,6 +118,15 @@ export const App = () => {
           element={
             <ProtectedRoute requiredRole="RECEPCIONISTA">
               <MedicPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/home/medicos"
+          element={
+            <ProtectedRoute requiredRole="MEDICO">
+              <HomeMedicPage/>
             </ProtectedRoute>
           }
         />

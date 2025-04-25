@@ -14,4 +14,5 @@ public interface MedicScheduleRepository extends JpaRepository<MedicSchedule, Lo
         List<MedicSchedule> findByMedicId(Long medicId);
         List<MedicSchedule> findByMedicIdAndDayOfWeek(Long medicId, DayOfWeek dayOfWeek);
 
+
 }

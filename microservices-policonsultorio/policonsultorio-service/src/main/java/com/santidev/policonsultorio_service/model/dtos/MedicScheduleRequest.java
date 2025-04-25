@@ -20,5 +20,6 @@ public class MedicScheduleRequest {
     private LocalTime startTime;
     private LocalTime endTime;
     private String medicId;
+    private String clinicId;
 
 }

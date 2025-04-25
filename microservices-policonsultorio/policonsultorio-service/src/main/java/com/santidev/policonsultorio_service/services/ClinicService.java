@@ -37,6 +37,12 @@ public class ClinicService {
 
     }
 
+    public List<ClinicResponse> getByMedic(Long medicId){
+
+        return clinicRepository.findByMedicId(medicId).stream().map(Mapper::mapToClinicResponse).toList();
+
+    }
+
     public void addClinic(ClinicRequest clinicRequest) {
         var clinic = Clinic.builder()
                 .name(clinicRequest.getName())

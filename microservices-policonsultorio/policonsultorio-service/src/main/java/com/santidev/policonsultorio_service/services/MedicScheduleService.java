@@ -5,6 +5,7 @@ import com.santidev.policonsultorio_service.model.dtos.MedicScheduleRequest;
 import com.santidev.policonsultorio_service.model.dtos.MedicScheduleResponse;
 import com.santidev.policonsultorio_service.model.entities.MedicSchedule;
 import com.santidev.policonsultorio_service.model.util.Mapper;
+import com.santidev.policonsultorio_service.repositories.ClinicRepository;
 import com.santidev.policonsultorio_service.repositories.MedicRepository;
 import com.santidev.policonsultorio_service.repositories.MedicScheduleRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class MedicScheduleService {
 
     private final MedicScheduleRepository medicScheduleRepository;
     private final MedicRepository medicRepository;
+    private final ClinicRepository clinicRepository;
 
 
     public MedicScheduleResponse getById(long id){
@@ -44,9 +46,12 @@ public class MedicScheduleService {
 
     }
 
+
+
     public void addMedicSchedule(MedicScheduleRequest medicScheduleRequest) {
         var clinic = MedicSchedule.builder()
                         .medic(medicRepository.findById(Long.parseLong(medicScheduleRequest.getMedicId())).orElseThrow(()-> new RuntimeException("medic not found with this id ")))
+                        .clinic(clinicRepository.findById(Long.parseLong(medicScheduleRequest.getClinicId())).orElseThrow(()-> new RuntimeException("clinic not found with this id ")))
                         .endTime(medicScheduleRequest.getEndTime())
                         .startTime(medicScheduleRequest.getStartTime())
                         .dayOfWeek(medicScheduleRequest.getDayOfWeek())
